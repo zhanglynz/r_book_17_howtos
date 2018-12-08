@@ -1,0 +1,680 @@
+--- 
+title: "R tips: 16 HOWTO's with examples for data analysts"
+author: "Lingyun Zhang"
+date: "2017-11-18"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+link-citations: yes
+links-as-notes: true
+colorlinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# {-}
+
+
+<!-- ![](pictures/rainbow.png) -->
+<img src="pictures/office_buildings.png" style="width: 125%; height: 125%"/>
+
+
+# Preface {-}
+
+This is my second book that is related to **R**; my first one is still 
+under review for publication. Based on my experiences on reading many books and writing a book, I think from Preface readers should have answers to these questions: What is the book about? What are the features of the book? Who are the intended readers? How to read the book? What is the background of the author? So, let me answer these questions here.
+
+This book includes 16 **R** tips, such as "how to explore a 'new' data set" (Chapter 3), "how to create contingency tables" (Chapter 7), "how to tally" (Chapter 8), "how to join two data tables" (Chapter 9), "how to plot data" (Chapter 10), "how to create a dynamic report" (Chapter 11), "how to learn Shiny" (Chapter 12), "how to check code efficiency" (Chapter 14), .... These are all very much practically useful for a data analyst in his/her daily work.
+
+This book gives detailed examples and uses fake data. Indeed, these are two features of the book. You may ask: "Why fake data, does it sound bad?" I do not care if it sounds bad. The reasons for using fake data are: (a) Fake data make reader's life easier, because they are easy to be understood and they serve the purpose for helping the reader quickly grasp the concepts and techniques. (b) Fake data make my writing easier -- this is obvious.
+
+The cover of this book shows office buildings, and this book is directly for those data analysts who work in buildings like these ones and are doing official statistics, e.g. data analysis and reporting. Indirectly, this book is also for the other data analysts; they may more or less get something useful from this book. The presumed level of **R** knowledge of the intended readers is beginner or advanced beginner.
+
+How to read this book? My suggestion is that firstly read the description at the beginning of each chapter and then read the **R** code. By "read the **R** code", I mean the reader can try to mentally understand the code and then run the code in **R** to check if you get the expected results.
+
+I wrote this book in my spare time (a couple of hours after dinner on work days and weekends). I did this because during my work I had solved some specific problems and after dinner when I digest--not food but--the solutions that I got I often had an urge to generalise the solutions. This is why I wrote this book. I have written down the solutions for the future me and also want to share them with you.
+
+**Short biography:** I was born in China and grew up there. I earned a Ph.D. in Mathematical Statistics from the University of Regina, Canada. To see my publications, here is the [link](https://scholar.google.co.nz/citations?user=nY8dkC8AAAAJ&hl=en) to my Google Scholar web page. I used to be in academia and changed to government jobs since 2016.
+
+
+**Acknowledgements**: I want to thank three ex-colleagues. Eric Wu was my buddy, and I thank him for answering my heaps of **R** questions. Peter Ellis works very hard even in after hours (http://ellisp.github.io/); he motivated me to work hard. James Hogan, thank you so much for your encouragement and help when I was in a difficult time, and I would never forget about the chocolates and cake.
+
+Special thanks to those who created the great **R** packages; special thanks to RStudio Inc., from which **R** users all over the world have tremendously benefited.
+
+
+**License:** This work by Lingyun Zhang is licensed under a
+[Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/)
+
+
+# How to organize a project folder
+
+It is exciting when we will start a new project. At the beginning, we should make things right! By that I mean we must organize our project folder properly. 
+
+Here are the steps for creating a sample project:
+
+1. Create a folder with a meaningful name for the project.
+2. In RStudio: **File** > **New Project** > **Existing Directory** > **Browse** > *The folder just created* > **Select Folder** > **Create Project**, this will result in a file with extension .Rproj
+3. Create two subfolders, R (which will contain R scripts) and Data (which will contain data sets) in the project folder.
+4. Create other subfolders, such as Image (which will contain graphs/pictures), if this is necessary.
+5. In the project folder, create other files, e.g. files for version control.
+6. In the project folder, after we have written **R** programs and saved them in the R folder, we create a file called integrate.R, which is an **R** script that integrates all the **R** programs in the R folder.
+
+In the above, Steps 1, 2, 3 and 6 are the must.
+
+A minimal example is shown below.
+
+The structure of the project folder:
+
+![](pictures/project.png)
+
+The integrate.R script:
+```
+# Please run the R programs in order
+
+source("./R/temp1.R")
+source("./R/create_a_plot.R")
+source("./R/create_a_table.R")
+```
+Note that "." (the dot) is for the root directory (i.e. the project folder). So, here we use a relative path instead of an absolute one. This is a good practice, because if other people copy/clone this project they will put the project folder under a parent folder with a name different from mine.
+
+
+# How to read data into **R**
+
+Reading data into **R** seems to be straightforward, but "the devil is in the detail." Indeed, we must pay attention to some fine points when use **R** functions to read data.
+
+Firstly, I make a summary table, which shows the most useful **R** functions for data import.
+
+import file type, or from       |       **R** function 
+:---------------------------   |       :----------------------
+.txt                           |       read.table()
+.csv                           |       read.csv() and readr::read_csv()
+.xls and .xlsx                 |       readxl::read_excel() and openxlsx::read.xlsx()
+.sav                           |       foreign::read.spss()
+.Rdata or rda                  |       load()
+.rds                           |       readRDS() and readr::read_rds() 
+Internet                       |       download.file()
+
+Secondly, the fine points.
+
+- Before reading a .txt file, it is a good idea that we open the file with Notepad++ and look at the encoding by clicking on the Encoding tab. If necessary, we can convert the encoding to "UTF-8", and use **read.table(..., fileEncoding = "UTF-8")**.
+
+- When we are dealing with large data, we'd better use **readr::read_csv()** rather than **read.csv()** because the former is much faster. It is good practice that we firstly open the file with Excel and spend some time understanding the types of variables. If it is not too troublesome, we should specify the types of variables, e.g. **readr::read_csv(..., col_types = "iDdccciccllc")**.    
+
+- "load(<file>) replaces all existing objects with the same names in the current environment (typically your workspace, .GlobalEnv) and hence potentially overwrites important data." (R Help) So, if we use **load()** we should put it at the beginning. 
+
+- A really useful small tip: type **file.choose()** into R console and then navigate until you find the file and click on Open; in such a way you can quickly know the absolute path of the file that you want to read into R. 
+
+Thirdly, examples:
+
+```{r, eval=FALSE, warning=FALSE}
+my_data <- read.table(file= "./data/SevenSurgeons.txt", header = TRUE)
+```
+
+```{r, eval=FALSE, warning=FALSE}
+load(file = "./data/CDS_all.rda")
+```
+
+```{r, eval=FALSE, warning=FALSE}
+file_infor <- readRDS(file = "./data/f_infor.rds")
+```
+
+```{r, eval=FALSE, warning=FALSE}
+library(readr)
+file_name <- "./data/export.csv"
+my_data <- read_csv(file = file_name, locale =  locale(), skip = 1) 
+```
+
+```{r, eval=FALSE, warning=FALSE}
+the_url <- "https://raw.githubusercontent.com/LarryZhang2016/Data/master/NZ_cities.csv"
+NZ_cities <- read_csv(the_url, skip =1)
+```
+
+```{r, eval=FALSE, warning=FALSE}
+library(readxl)
+month_and_year <- "July2016"
+raw_data_file_name <- paste0("./RawData/", "raw_data_", month_and_year, ".xlsx")
+raw_data <- 
+  read_excel(path = raw_data_file_name, sheet = "Very_raw_data", skip = 0, col_names = TRUE)
+```
+
+<!-- # How to write data into a file -->
+
+
+# How to explore a "new" data set
+
+By a "new" data set, I mean it is new to us, that is, we have never seen it before. To explore this new 
+data set, we can follow these steps.
+
+- Read the data into **R**.
+- Find the dimensions of this data set by using **dim()**.
+- Understand the structure of the data by using **str()**.
+- See the first 6 rows of the data using **head()**; see the last 6 rows of the data using
+**tail()**.
+- Find out the names of all the (column) variables in the data set. Pay attention to the variable with "ID" (or "id") as part
+of its name, since this variable will be used when we want to *join* this data set with another one.
+- Figure out the variables that of interest by reading the names. If the interesting variable is of *categorical* type, then use **unique()** to find out all the possible values that the variable can take. If the interesting variable is of *continuous* type, then use **summary()** to look at the 5-number summary.
+- Use **View()** to have a quick look at the whole data set.
+
+Example:
+```{r, code=readLines("./R/explore_new_data.R"), eval=FALSE}
+```
+
+# How to deal with NA's
+
+"NA" stands for "Not Available", or it means "missing value". These **R** functions are useful to deal with NA's, **is.na()**, **na.omit()**, **complete.cases()**, **colSums()**, **rowSums()**, **tidyr::replace_na()**
+and **dplyr::na_if()**. 
+<!-- and **dplyr::coalesce()** -->
+
+Example:
+```{r, code=readLines("./R/dealing_with_na.R"), eval=FALSE}
+```
+
+# How to deal with empty spaces
+
+**Warning**: Empty spaces in (column) variable names or in variables often cause troubles!
+
+## Empty spaces in variable names
+
+After reading data into **R**, we should have the habit of using **names()** (or **colnames()**) to have a look at all the names of the column names. If we find some column names have empty spaces, then we should pay attention to and even do something about that. Let me explain with an example.
+
+Example:
+```{r, code=readLines("./R/dealing_with_spaces_in_names.R"), eval=FALSE}
+```
+
+## Empty spaces in variable values
+
+Sometimes we may encounter a variable with its values containing empty spaces at the beginning or at the end or both, and almost certainly we should remove these spaces. Fortunately, it is easy to do so with **stringr::str_trim()** or **trimws()**.
+
+Example 1:
+```{r, code=readLines("./R/dealing_with_spaces_in_variables.R"), eval=FALSE}
+```
+
+Example 2: Removing leading/trailing and in-between spaces
+```{r, code=readLines("./R/dealing_with_space_example2.R"), eval=TRUE}
+```
+
+# How to do simple re-coding
+
+At work, sometimes we may need to *recode* a categorical variable
+to another one according to some *mapping rules*. This is the so-called "re-coding". Below is an **R** function
+that I write for recording.
+
+```{r, code=readLines("./R/simple_recoding.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+Let me use two examples to explain.
+
+Example 1: 
+```{r}
+(x <- sample(letters, 30, replace = TRUE))
+```
+We want to re-code x to y, where x has lowercase letters and y has the corresponding uppercase letters. In this case.
+```{r, eval=FALSE}
+from = letters
+```
+and
+```{r, eval=FALSE}
+to = LETTERS
+```
+We can use the default 
+```{r, eval=FALSE}
+mapping_rule_data = NULL
+```
+since this is a one-to-one mapping.
+```{r}
+(y <- simple_recoding(x, from = letters, to = LETTERS))
+```
+
+Example 2: 
+```{r}
+(u <- sample(letters, 30, replace = TRUE))
+```
+We want to re-code u to w, where the mapping rule is as follows.
+$$
+\begin{array}{ccc}
+\left\{\hbox{a, b, c, d, e}\right\} &\longrightarrow & \left\{\hbox{A}\right\}\\
+\left\{\hbox{f, g, h, i, j}\right\} &\longrightarrow & \left\{\hbox{B}\right\}\\
+\left\{\hbox{k, l, m, n, o}\right\} &\longrightarrow & \left\{\hbox{C}\right\}\\
+\left\{\hbox{p, q, r, s, t}\right\} &\longrightarrow& \left\{\hbox{D}\right\}\\
+\left\{\hbox{u, v, w, x, y}\right\} &\longrightarrow& \left\{\hbox{E}\right\}\\
+\left\{\hbox{z}\right\} &\longrightarrow& \left\{\hbox{Z}\right\}
+\end{array}
+$$
+In this case,
+```{r, eval=FALSE}
+from = letters
+```
+and
+```{r, eval=FALSE}
+to = c(LETTERS[1:5], "Z")
+```
+But note that
+```{r, eval=FALSE}
+mapping_rule_data = c(1, 5, 6, 10, 11, 15, 16, 20, 21, 25, 26, 26 )
+```
+because letters[1:5] are mapped to "A", letters[6:10] are mapped to "B", and so on.
+```{r}
+(simple_recoding(u, from = letters, to = c(LETTERS[1:5], "Z"),
+                 mapping_rule_data = c(1, 5, 6, 10, 11, 15, 16, 20, 21, 25, 26, 26 )))
+```
+
+Exercise: 
+```{r, eval=FALSE}
+fk_data <- data.frame(my_colors = c("red", "orange", "yellow", "green", "blue"))
+```
+Create a new variable called "RGB" following the mapping rules
+$$
+\begin{array}{ccc}
+\left\{\hbox{red, orange, yellow}\right\} &\longrightarrow& \left\{\hbox{R}\right\}\\
+\left\{\hbox{green}\right\} &\longrightarrow& \left\{\hbox{G}\right\}\\
+\left\{\hbox{blue}\right\} &\longrightarrow& \left\{\hbox{B}\right\}
+\end{array}
+$$
+
+Answer to the Exercise:
+```{r, code=readLines("./R/answer_2_re-coding_Exercise.R"), eval=FALSE, message=FALSE, warning=FALSE}
+```
+
+
+# How to create contingency tables
+
+We can use **table()**, **addmargins()**,  **prop.table()** and **as.data.frame.matrix()** to create the contingency tables that we want. See this example:
+```{r, code=readLines("./R/creating_table.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+**Remark:** If there are NA's, **table()** function will ignore them. If we want to include NA's in the table, we can use **dplyr::tally()** plus **tidyr::spread()**;
+the following example shows how to do this. For more details about **dplyr::tally()**, see the next chapter, *How to tally*.
+```{r, code=readLines("./R/remark_creating_table.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+# How to tally
+
+As data analysts, we must know how to tally data. For tallying one or two variables, we can use function **table()** plus other helper functions as shown in the previous chapter. Here, we will learn how to do the job for $n$ variables (where $n\ge 1$) using **dplyr** package.
+
+Example 1
+```{r, code=readLines("./R/how_to_tally.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+Using the same fake data as that of Example 1, in Example 2, we show how to find the number of distinct weight-color combinations for each of the "long", "medium" and "short" subgroups. At work, sometimes we need to deal with this kind of problems. The solution comes from https://stackoverflow.com/questions/43690920/count-subgroups-in-group-by-with-dplyr
+
+Example 2
+```{r, code=readLines("./R/how_to_tally_example_2.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+
+# How to join two data tables
+
+In my opinion, the need to join two data tables together, is one of indicators (of course there are others)
+that we are dealing with complex data analysis. In practice, sometimes we may need to join many, say five, or 
+even ten tables together. Hadley Wickham's **dplyr** package provides **left_join()**, **right_join()**, **inner_join()**,
+**full_join()**, **semi_join()** and **anti_join()**; among them, the most useful one probably is **left_join()**. Let me quote 
+a couple of sentences from *[R for Data Science](http://r4ds.had.co.nz/relational-data.html)* (by Garrett Grolemund and Hadley Wickham),
+
+> The most commonly used join is the left join: you use this whenever you look up additional data from another table, because it preserves the original observations even when there isn’t a match. The left join should be your default join: use it unless you have a strong reason to prefer one of the others.
+
+The syntax for **left_join()** is
+
+```{r, eval=FALSE}
+left_join(table_1, table_2, by = c("ID_1" = "ID_2"))
+```
+The key point to keep in mind is that table_1 is to the **left** of table_2, which means table_1 is the **main** table, or
+to be more exact, which means **all the rows and columns of table_1 will be kept**.
+
+Let's have an example.
+
+Example.
+```{r, code=readLines("./R/on_joins.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+ 
+Exercises.
+
+1. Redo the above Example to recreate table_3 but using **right_join**.
+
+2. Try **inner_join()** and **semi_join()** on table_1 and table_2 in the above example, and observe the difference between the
+two resulted tables.
+
+3. Try **full_join()** on table_1 and table_2 in the above example.
+
+4. Try **anti_join()** on table_1 and table_2 in the above example.
+
+
+Answer to the exercises:
+```{r, code=readLines("./R/join_exercises.R"), eval=FALSE}
+```
+
+
+# How to plot data
+ 
+How to plot data? This is a big question, and here I can give a quick/brief answer, 
+which is this two-step procedure. Step 1: Get the data ready. Step 2: Use  **ggplot2** package (or another package, e.g. **treemap** package, for some a specific plot).
+In the following 13 sections, I will use examples to illustrate the two-step procedure.
+ 
+## Creating basic bar charts
+
+Essentially, a basic bar chart is a plot of a categorical variable on x-axis and a numerical
+variable on y-axis.
+
+Example 1: a basic bar chart.
+```{r, code=readLines("./R/plot_example_1.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+Example 2: still a basic bar chart but making the bars horizontal and based on percentage
+```{r, code=readLines("./R/plot_example_2.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating side-by-side and stacked bar charts
+
+Example 3
+```{r, code=readLines("./R/plot_example_3.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating back-to-back bar charts
+
+Example 4
+```{r, code=readLines("./R/back_to_back_bar_chart.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+**Remark**: We can use
+```{r, eval=FALSE}
+scale_x_discrete(limits = rev(the_order))
+```
+to replace 
+```{r, eval=FALSE}
+scale_x_discrete(limits = the_order)
+```
+and the resulted chart is also called *pyramid chart*. If you google "population pyramid" you can find more examples of pyramid charts.
+
+
+## Creating Pareto charts
+
+A Pareto chart basically is a bar chart (with the bars ordered) plus a frequency polygon (i.e. a line chart). It is useful for revealing something like the 80-20 rule---e.g. 80% of the accidents are due to 20% of the possible reasons. See https://en.wikipedia.org/wiki/Pareto_chart for more details. The following example shows how to make a Pareto chart. Please pay attention to how the *layers* are built up.
+
+Example 5
+```{r, code=readLines("./R/Pareto_diagram.R"), eval=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+## Creating lollipop charts
+
+Notice that 
+$$
+\hbox{a lollipo} = \hbox{a segment} + \hbox{a point},
+$$
+thus it is natural to use **geom_segment()** and **geom_point()** to create
+lollipop charts.
+
+Example 6
+```{r, code=readLines("./R/plot_example_4.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating treemaps
+
+A treepmap can show three variables by using *lables*, *sizes of rectangles* and *colors*. Below is a treemap of the top 15 NZ's most populous cities based on the 2016 data. The original data comes from: https://en.wikipedia.org/wiki/List_of_cities_in_New_Zealand
+
+Example 7
+```{r, code=readLines("./R/NZ_cities.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating scatter plots
+
+A scatter plot is very useful for exploring the relationship between two continuous
+variables. With the following example, we show how to create a scatter plot. We 
+want to emphasize the details, that is,
+
+- label properly
+- mark the *outliers*
+- add in the regression line
+- refit data and add in the new regression line
+
+Example 8
+```{r, code=readLines("./R/NZ_cities_scatter_plot.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating side-by-side box plots
+
+Roughly speaking, a box plot shows the five-number summary---i.e. minimum, first quartile, second quartile, third quartile, and maximum---of data. Plotting several box plots together, we have the so-called side-by-side box plot, which is useful for comparison of data among groups. 
+
+In the following example, we will create a side-by-side box plot for random numbers drawn from the standard normal distribution, the t distribution with five degrees of freedom, the uniform distribution on $(-3, 3)$, and the double exponential distribution with the probability density
+$$
+f(y)=\frac{1}{2}\lambda e ^{-\lambda |y|}\ \hbox{for}\ -\infty <y<+\infty,
+$$
+where $\lambda=\sqrt{\frac{2}{\pi}}$.
+
+For our purpose, we need this
+
+**Technical note**: We can show that if $X\sim \hbox{Exp}(\lambda)$, $U\sim \hbox{Uniform}(0, 1)$, and $X$ and $U$ are independent, then
+$$
+Y=\left\{
+\begin{array}{rl}
+-X, & \hbox{if}\ U\le 0.5,\\
+ X, & \hbox{if}\ U > 0.5,
+\end{array}
+\right.
+$$
+has a double exponential distribution; that is, the probability density function of $Y$ is
+$$
+f(y) = \frac{\lambda}{2}e^{-\lambda |y|}\ \hbox{for}\ -\infty < y < +\infty.
+$$
+
+
+Example 9
+```{r, code=readLines("./R/side_by_side_boxplot.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+## Creating grid plots
+
+Grid plots allow us to show several (e.g. four) variables in one plot, and certainly they are useful. The key here is to use **facet_grid()**.
+
+Example 10
+```{r, code=readLines("./R/use_facet_grid.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Creating a simple PCA plot
+
+When we have an $n$-variate ($n\ge 3$) data set, where each column contains continuous type data, we often want to look at the *cluster relationship* among the $m$ observations (or rows). For this purpose. we can make a PCA (Principal Component Analysis) plot. The fundamental idea here is that we map the $n$-dimension data to 2-dimension (PC1 and PC2) data and then make a scatter plot of the 2-dimension data.
+
+Example 11
+```{r, code=readLines("./R/PCA_plot.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+## Creating time series plots
+
+It is easy to create a time series plot. Here we pay attention to some "small" things.
+
+1. Make sure the time is labelled correctly on x-axis.
+2. If the values are for money and large, then we should show the $ sign and use 
+"," in the numbers for labeling y-axis.
+3. We often want to get the points connected to show that the points are related.
+
+Example 12
+```{r, code=readLines("./R/plot_ts_example.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+## Showing pop-up's
+
+For exploratory data analysis, we may want our plot to have such a feature, which is when we hover the mouse on the plot some information will pop up. In the following example, I will show how to do it with **plotly::ggplotly()** (thanks to Chris Hansen for pointing this function to me.) Of course there are other useful **R** packages available for showing pop-up's, such as **googleVis** and **highcharter**, if having an interest the readers can explore them.
+
+Example 13
+```{r, code=readLines("./R/popup_example1.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+## Putting plots in one panel
+
+We create a few plots and want to put them together. It is handy to do so with
+**gridExtra::grid.arrange()**. (I thank Peter Ellis for pointing me to this function.)
+
+Example 14
+```{r, code=readLines("./R/put_in_one_panel.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+# How to create a dynamic report
+
+Suppose we are requested to produce a report. This report has the following features.
+
+* It is based on data collected quarterly (or annually). That is, this is a report that provides the context and summarises the data with **texts**, **numbers**, **graphs** and **tables**.
+* The report must be quickly updated when the new quarterly (or annually) data are available---this is a *dynamic* report. 
+
+How to create such a report? The short answer is that we can use the **Knitr** package to do it.
+
+The workflow is shown below.
+
+0. Create a new project, called e.g. DynamicReport in Rstudio, and then create 
+subfolders: Data, R, Figures, Tables, Knitr, Output
+1. Save raw data in the Data folder.
+2. Write R programs and save them in the R folder. The R programs are for 
+*data analysis*, such as tidying up the data (if necessary), creating **graphs** 
+(the created graphs will be saved in the Figures folder), **tables** (will be saved 
+in the Tables folder in TEX format) and **numbers** (will be saved in an Rdata file which will be in an automatically created sub-folder called "cache" under the R folder).
+3. Prepare Report.Rnw file, which will be saved in the Knitr folder.
+4. Create integrate.R (under the project folder) to produce the report.
+
+Following the above workflow, I have done an example called "dynamic_report", and this example can be downloaded from my GitHub page https://github.com/LarryZhang2016
+
+# How to learn Shiny 
+
+It's cool if we can make shiny apps, and sometimes we are asked to make a shiny app at work. So, we do want and need to learn the
+Shiny package. The question is: How can we quickly learn it? I don't think there is the best answer to this question, because we 
+all have different learning styles and "one man's meat is [possibly] another man's poison." Here, based on my learning experience, \i just tell you how I learned the Shiny stuff; it's only for your reference.
+
+1. I watched the three webinars presented by Garrett Grolemund a few times; the links are:
+https://www.rstudio.com/resources/webinars/how-to-start-with-shiny-part-1/
+https://www.rstudio.com/resources/webinars/how-to-start-with-shiny-part-2/
+https://www.rstudio.com/resources/webinars/how-to-start-with-shiny-part-3/
+
+2. I watched Winston Chang's webinar (https://www.rstudio.com/resources/webinars/dynamic-dashboards-with-shiny/) a couple of times.
+
+3. Practice, using this template
+
+```
+library(shiny)
+
+ui <- fluidPage(
+xxxxInput(),
+xxxxOutput()
+)
+
+server <- function(input, output)
+{
+ R code
+}
+
+shinyApp(ui = ui, server = server)
+```
+for example,
+
+```{r, code=readLines("./R/shiny_example.R"), eval=FALSE, message=FALSE, warning=FALSE}
+```
+
+Below is a screenshot
+![](pictures/shiny_screenshot.png)
+
+4. I made several small apps and published them on https://www.shinyapps.io/ e.g. see these three:
+https://larryzhang.shinyapps.io/histogramorboxplot/,
+https://larryzhang.shinyapps.io/distributions/,
+and
+https://larryzhang.shinyapps.io/city_map/
+
+
+# How to make a simple data dictionary
+
+Inspired by Dania M. Rodriguez (https://cran.r-project.org/web/packages/dataMeta/vignettes/dataMeta_Vignette.html), I wrote an **R** function **data_dic_builder()**  for making simple data dictionaries.
+
+Explanations:
+
+- Output
+    - the output is a dataframe having two columns
+    - column 1 has the names of data variables
+    - column 2 has the number of unique values of each variable if it is not an interesting one, or the unique values of each variable if it is
+an interesting one
+
+- Arguments
+    - 'df' is a dataframe which contains the data
+    - 'variable_type' is a vector which contains 0 or 1. 0 means we are not interested in this variable; 1 means that we have an interest in this variable 
+
+Example:
+```{r, code=readLines("./R/test_data_dic_builder.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+
+
+# How to check code efficiency
+
+At some point, we may feel frustrated about our code---it takes so long to run! Generally speaking, it is a difficult task to make our code very efficient, but it is easy to find the elapsed time of code running and the bottleneck(s).
+
+The tool that we can use is:
+```
+library(profvis)
+profvis({R code})
+```
+Example:
+```{r, eval=FALSE}
+library(profvis)
+profvis({
+  x <- rnorm(10e8)
+  total_1 <- 0
+  for(i in 1:10e8) total_1 <- total_1 + x[i]
+  total_2 <- sum(x)
+  list(total_1, total_2)
+})
+```
+![](pictures/efficiency_analysis.png)
+
+As expected, the above analysis shows that the bottleneck is at the "for loop".
+
+For more details, please watch Winston Chang's webinar
+https://www.rstudio.com/resources/webinars/profvis-profiling-tools-for-faster-r-code/
+and his another talk
+https://www.rstudio.com/resources/videos/profiling-and-performance/
+
+# How to put *n* things in *m* boxes
+
+How to put *n* things randomly and uniformly into *m* boxes, this is an interesting problem and its solution is useful for our work. There are probably many ways to solve this problem; here is my way---I will use **gtools::rdirichlet()** (For details about the Dirichlet distribution, see https://en.wikipedia.org/wiki/Dirichlet_distribution)
+
+R code:
+```{r, code=readLines("./R/split_n.R"), eval=TRUE, message=FALSE, warning=FALSE}
+```
+
+# How to restore lost zeros
+
+I had the so-called "lost zeros" problem before. The problem can be described like this: One column, called "ID", contains n-digit (e.g. n=7) numbers; but for whatever reasons, the leading zeros are lost, e.g. "0926541", "0024267" and "0003115" become
+"926541", "24267" and "3115", respectively. We must restore the lost zeros back and change the variable "ID" to characteristic type, because we will need this variable to join the data set with another data set. How to solve this problem?
+
+The major steps of my solution to this problem is as follows:
+
+1, Write a helper function:
+```
+helper_func <- function(x)
+{m <- length(x)
+ y <- rep("", m)
+ for(i in 1:m) if(x[i] > 0) y[i] <- paste(rep(0, x[i]), collapse = "")
+ return(y)
+}
+
+```
+2. Create a new variable, "no_zeros", which is for the number of zeros that need to be added to each ID to make it have n digits. Note the formula is:
+$$
+n - \hbox{ceiling}(\hbox{log10}(\hbox{ID}))
+$$
+3. Use **dplyr::mutate()** and **helper_func()** to create a new column, "the_zeros", which contains the corresponding number of lost zeros.
+
+4. Use **paste0()** to concatenate "the_zeros" and "ID" and then assign to "ID".
+
+5. Use **dplyr::select** to unselect "no_zeros" and "the_zeros".
+
+Example:
+```{r, code=readLines("./R/restore_missing_zeros.R"), eval=FALSE}
+```
+
+**Remark**: After I had done the above, from a colleague, I learned a much easier way to solve the problem, which is to use **sprintf()**. Below is the **R** code for re-doing the above example using **sprintf()**.
+
+```{r, code=readLines("./R/redo_restore_missing_zeros.R"), eval=FALSE}
+```
