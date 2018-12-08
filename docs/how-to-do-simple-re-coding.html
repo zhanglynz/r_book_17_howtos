@@ -183,8 +183,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Let me use two examples to explain.</p>
 <p>Example 1:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(x &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dv">30</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</code></pre></div>
-<pre><code>##  [1] &quot;n&quot; &quot;r&quot; &quot;o&quot; &quot;w&quot; &quot;k&quot; &quot;n&quot; &quot;q&quot; &quot;o&quot; &quot;b&quot; &quot;b&quot; &quot;f&quot; &quot;p&quot; &quot;m&quot; &quot;b&quot; &quot;w&quot; &quot;h&quot; &quot;c&quot;
-## [18] &quot;f&quot; &quot;t&quot; &quot;b&quot; &quot;y&quot; &quot;c&quot; &quot;j&quot; &quot;t&quot; &quot;r&quot; &quot;r&quot; &quot;p&quot; &quot;b&quot; &quot;g&quot; &quot;f&quot;</code></pre>
+<pre><code>##  [1] &quot;c&quot; &quot;x&quot; &quot;w&quot; &quot;k&quot; &quot;l&quot; &quot;i&quot; &quot;f&quot; &quot;y&quot; &quot;q&quot; &quot;z&quot; &quot;f&quot; &quot;j&quot; &quot;d&quot; &quot;z&quot; &quot;d&quot; &quot;f&quot; &quot;b&quot;
+## [18] &quot;a&quot; &quot;n&quot; &quot;l&quot; &quot;r&quot; &quot;y&quot; &quot;d&quot; &quot;b&quot; &quot;i&quot; &quot;c&quot; &quot;p&quot; &quot;o&quot; &quot;i&quot; &quot;w&quot;</code></pre>
 <p>We want to re-code x to y, where x has lowercase letters and y has the corresponding uppercase letters. In this case.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">from =<span class="st"> </span>letters</code></pre></div>
 <p>and</p>
@@ -193,12 +193,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mapping_rule_data =<span class="st"> </span><span class="ot">NULL</span></code></pre></div>
 <p>since this is a one-to-one mapping.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(y &lt;-<span class="st"> </span><span class="kw">simple_recoding</span>(x, <span class="dt">from =</span> letters, <span class="dt">to =</span> LETTERS))</code></pre></div>
-<pre><code>##  [1] &quot;N&quot; &quot;R&quot; &quot;O&quot; &quot;W&quot; &quot;K&quot; &quot;N&quot; &quot;Q&quot; &quot;O&quot; &quot;B&quot; &quot;B&quot; &quot;F&quot; &quot;P&quot; &quot;M&quot; &quot;B&quot; &quot;W&quot; &quot;H&quot; &quot;C&quot;
-## [18] &quot;F&quot; &quot;T&quot; &quot;B&quot; &quot;Y&quot; &quot;C&quot; &quot;J&quot; &quot;T&quot; &quot;R&quot; &quot;R&quot; &quot;P&quot; &quot;B&quot; &quot;G&quot; &quot;F&quot;</code></pre>
+<pre><code>##  [1] &quot;C&quot; &quot;X&quot; &quot;W&quot; &quot;K&quot; &quot;L&quot; &quot;I&quot; &quot;F&quot; &quot;Y&quot; &quot;Q&quot; &quot;Z&quot; &quot;F&quot; &quot;J&quot; &quot;D&quot; &quot;Z&quot; &quot;D&quot; &quot;F&quot; &quot;B&quot;
+## [18] &quot;A&quot; &quot;N&quot; &quot;L&quot; &quot;R&quot; &quot;Y&quot; &quot;D&quot; &quot;B&quot; &quot;I&quot; &quot;C&quot; &quot;P&quot; &quot;O&quot; &quot;I&quot; &quot;W&quot;</code></pre>
 <p>Example 2:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(u &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dv">30</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</code></pre></div>
-<pre><code>##  [1] &quot;v&quot; &quot;i&quot; &quot;z&quot; &quot;y&quot; &quot;e&quot; &quot;u&quot; &quot;j&quot; &quot;a&quot; &quot;q&quot; &quot;v&quot; &quot;h&quot; &quot;t&quot; &quot;i&quot; &quot;b&quot; &quot;q&quot; &quot;o&quot; &quot;w&quot;
-## [18] &quot;t&quot; &quot;i&quot; &quot;o&quot; &quot;g&quot; &quot;i&quot; &quot;q&quot; &quot;r&quot; &quot;h&quot; &quot;t&quot; &quot;k&quot; &quot;x&quot; &quot;d&quot; &quot;b&quot;</code></pre>
+<pre><code>##  [1] &quot;v&quot; &quot;t&quot; &quot;o&quot; &quot;g&quot; &quot;w&quot; &quot;e&quot; &quot;g&quot; &quot;j&quot; &quot;n&quot; &quot;w&quot; &quot;b&quot; &quot;n&quot; &quot;f&quot; &quot;x&quot; &quot;x&quot; &quot;x&quot; &quot;b&quot;
+## [18] &quot;k&quot; &quot;n&quot; &quot;d&quot; &quot;i&quot; &quot;l&quot; &quot;q&quot; &quot;b&quot; &quot;j&quot; &quot;y&quot; &quot;d&quot; &quot;u&quot; &quot;e&quot; &quot;g&quot;</code></pre>
 <p>We want to re-code u to w, where the mapping rule is as follows. <span class="math display">\[
 \begin{array}{ccc}
 \left\{\hbox{a, b, c, d, e}\right\} &amp;\longrightarrow &amp; \left\{\hbox{A}\right\}\\
@@ -217,8 +217,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>because letters[1:5] are mapped to “A”, letters[6:10] are mapped to “B”, and so on.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="kw">simple_recoding</span>(u, <span class="dt">from =</span> letters, <span class="dt">to =</span> <span class="kw">c</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;Z&quot;</span>),
                  <span class="dt">mapping_rule_data =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">25</span>, <span class="dv">26</span>, <span class="dv">26</span> )))</code></pre></div>
-<pre><code>##  [1] &quot;E&quot; &quot;B&quot; &quot;Z&quot; &quot;E&quot; &quot;A&quot; &quot;E&quot; &quot;B&quot; &quot;A&quot; &quot;D&quot; &quot;E&quot; &quot;B&quot; &quot;D&quot; &quot;B&quot; &quot;A&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot;
-## [18] &quot;D&quot; &quot;B&quot; &quot;C&quot; &quot;B&quot; &quot;B&quot; &quot;D&quot; &quot;D&quot; &quot;B&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;A&quot; &quot;A&quot;</code></pre>
+<pre><code>##  [1] &quot;E&quot; &quot;D&quot; &quot;C&quot; &quot;B&quot; &quot;E&quot; &quot;A&quot; &quot;B&quot; &quot;B&quot; &quot;C&quot; &quot;E&quot; &quot;A&quot; &quot;C&quot; &quot;B&quot; &quot;E&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot;
+## [18] &quot;C&quot; &quot;C&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;A&quot; &quot;B&quot; &quot;E&quot; &quot;A&quot; &quot;E&quot; &quot;A&quot; &quot;B&quot;</code></pre>
 <p>Exercise:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fk_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">my_colors =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;orange&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>))</code></pre></div>
 <p>Create a new variable called “RGB” following the mapping rules <span class="math display">\[
