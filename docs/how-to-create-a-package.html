@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="how-to-explore-a-new-data-set.html">
-<link rel="next" href="how-to-deal-with-empty-spaces.html">
+<link rel="prev" href="how-to-check-code-efficiency.html">
+<link rel="next" href="how-to-put-n-things-in-m-boxes.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -163,61 +163,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="how-to-deal-with-nas" class="section level1">
-<h1><span class="header-section-number">4</span> How to deal with NA’s</h1>
-<p>“NA” stands for “Not Available”, or it means “missing value”. These <strong>R</strong> functions are useful to deal with NA’s, <strong>is.na()</strong>, <strong>na.omit()</strong>, <strong>complete.cases()</strong>, <strong>colSums()</strong>, <strong>rowSums()</strong>, <strong>tidyr::replace_na()</strong> and <strong>dplyr::na_if()</strong>. <!-- and **dplyr::coalesce()** --></p>
-<p>Example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())
+<div id="how-to-create-a-package" class="section level1">
+<h1><span class="header-section-number">15</span> How to create a package</h1>
+<div id="what-is-an-r-package" class="section level2">
+<h2><span class="header-section-number">15.1</span> What is an R package?</h2>
+<p>An R package is a folder that contains required files and sub-folders. In RStudio, it is easy to create an R package.</p>
+</div>
+<div id="two-handy-tools" class="section level2">
+<h2><span class="header-section-number">15.2</span> Two handy tools</h2>
+<ul>
+<li><code>devtools</code></li>
+<li><code>roxygen2</code></li>
+</ul>
+</div>
+<div id="the-procedure" class="section level2">
+<h2><span class="header-section-number">15.3</span> The procedure</h2>
+<ul>
+<li><p><strong>Step 1:</strong> Create the “structure”, which is an empty folder containing required although empty sub-folders and files, in RStudio. <strong>file&gt;new project…&gt;package</strong></p></li>
+<li><p><strong>Step 2:</strong> Write R files and save them in the R folder. An example:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; find key information about a dataframe</span>
+<span class="co">#&#39;</span>
+<span class="co">#&#39; This function allows you to find key information about a dataframe</span>
+<span class="co">#&#39; @param a_df a dataframe</span>
+<span class="co">#&#39; @keywords key info; dataframe</span>
+<span class="co">#&#39; @export</span>
+<span class="co">#&#39; @author Lingyun (Larry) Zhang \email{lyzhang10@gmail.com}</span>
+<span class="co">#&#39; @examples</span>
+<span class="co">#&#39; temp_df &lt;-</span>
+<span class="co">#&#39;      data.frame(a = 1:10,</span>
+<span class="co">#&#39;                 b = NA,</span>
+<span class="co">#&#39;                 e = c(letters[1:8], NA, NA))</span>
+<span class="co">#&#39; x &lt;- find_df_key_info(temp_df)</span>
 
-<span class="co"># load packages</span>
-<span class="kw">library</span>(dplyr) <span class="co"># for na.if</span>
-<span class="kw">library</span>(tidyr) <span class="co"># for replace_na</span>
+<span class="co">#&#39; @importFrom magrittr %&gt;%</span>
 
-<span class="co"># create a fake data set</span>
-fk_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">v1 =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, 
-                      <span class="dt">v2 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">8</span>, <span class="op">-</span><span class="dv">99</span>),
-                      <span class="dt">v3 =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="kw">rnorm</span>(<span class="dv">3</span>)))
-
-<span class="co"># which variables have NA&#39;s and how many NA&#39;s</span>
-<span class="kw">colSums</span>(<span class="kw">is.na</span>(fk_data))
-
-<span class="co"># which rows have NA&#39;s and how many NA&#39;s</span>
-<span class="kw">rowSums</span>(<span class="kw">is.na</span>(fk_data))
-
-<span class="co"># get all the rows which have NA&#39;s</span>
-fk_data_na_rows &lt;-<span class="st"> </span>fk_data[<span class="kw">rowSums</span>(<span class="kw">is.na</span>(fk_data)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, ]
-
-<span class="co"># get all the rows which do not have NA&#39;s</span>
-fk_data_without_na_rows &lt;-<span class="st"> </span>fk_data[<span class="kw">rowSums</span>(<span class="kw">is.na</span>(fk_data)) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, ]
-<span class="co"># or</span>
-fk_data_without_na_rows &lt;-<span class="st"> </span>fk_data[<span class="kw">complete.cases</span>(fk_data) <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>, ]
-<span class="co"># or</span>
-fk_data_without_na_rows &lt;-<span class="st"> </span><span class="kw">na.omit</span>(fk_data)
-
-
-<span class="co"># replace all the NA&#39;s with 0</span>
-fk_data_replace &lt;-<span class="st"> </span>fk_data
-fk_data_replace[<span class="kw">is.na</span>(fk_data_replace)] &lt;-<span class="st"> </span><span class="dv">0</span>
-<span class="co"># or directly fk_data[is.na(fk_data)] &lt;- 0, if we don&#39;t need fk_data anymore</span>
-
-<span class="co"># replace NA in v3 with 1</span>
-fk_data_replace &lt;-<span class="st"> </span>
-<span class="st">  </span>fk_data <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">replace_na</span>(<span class="kw">list</span>(<span class="dt">v3 =</span> <span class="dv">1</span>))
-
-<span class="co"># replace -99 in fk_data by NA</span>
-fk_data_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">na_if</span>(fk_data, <span class="op">-</span><span class="dv">99</span>)
-
-<span class="co"># find the mean of v2 in fk_data</span>
-the_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(fk_data<span class="op">$</span>v2, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
+find_df_key_info &lt;-<span class="st"> </span><span class="cf">function</span>(a_df)
+{re_df &lt;-
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">vari_names =</span> <span class="kw">names</span>(a_df)) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">type =</span> purrr<span class="op">::</span><span class="kw">map_chr</span>(a_df, typeof),
+                <span class="dt">no_of_unique_rows =</span> purrr<span class="op">::</span><span class="kw">map_int</span>(a_df, <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x))),
+                <span class="dt">no_of_rows =</span> <span class="kw">dim</span>(a_df)[<span class="dv">1</span>],
+                <span class="dt">no_of_NAs =</span> purrr<span class="op">::</span><span class="kw">map_int</span>(a_df, <span class="cf">function</span>(x) <span class="kw">sum</span>(<span class="kw">is.na</span>(x))))
+ <span class="kw">return</span>(re_df)
+}</code></pre></div>
+<ul>
+<li><strong>Step 3:</strong> Run the following R code</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">library</span>(roxygen2)
+<span class="kw">document</span>()</code></pre></div>
+<ul>
+<li><strong>Step 4:</strong> Work on <code>DESCRIPTION</code> file. An example:</li>
+</ul>
+<pre><code>Package: dfexplorer
+Type: Package
+Title: &#39;dfexplorer&#39; for explore new dataframe
+Version: 0.1.0
+Author: Lingyun (Larry) Zhang
+Maintainer: Lingyun (Larry) Zhang &lt;lyzhang10@gmail.com&gt;
+Description: This package contains functions for explore &quot;new&quot; data in a dataframe
+Imports:
+    dplyr, 
+    magrittr,
+    purrr
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1</code></pre>
+<ul>
+<li><p><strong>Step 5:</strong> Build the package by clicking on the <code>Build</code> button and …</p></li>
+<li><strong>Step 6:</strong> Version control—link to a repo in Github
+<ul>
+<li>initialize the project. Tools&gt;Version Control&gt;…</li>
+<li>stage and commit</li>
+<li>create a repo under your Github account</li>
+<li>set up connection by clicking <code>Git</code> button; then clicking on the “two purple boxes and a white square” in the Git pane …. (Reference: section 17.5.3 on <a href="https://happygitwithr.com/existing-github-last.html" class="uri">https://happygitwithr.com/existing-github-last.html</a>)</li>
+<li>commit and push</li>
+</ul></li>
+</ul>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="how-to-explore-a-new-data-set.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="how-to-deal-with-empty-spaces.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="how-to-check-code-efficiency.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="how-to-put-n-things-in-m-boxes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

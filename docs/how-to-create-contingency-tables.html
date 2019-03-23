@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>R tips: 16 HOWTO’s with examples for data analysts</title>
-  <meta name="description" content="R tips: 16 HOWTO’s with examples for data analysts">
+  <title>R tips: 17 HOWTO’s with examples for data analysts</title>
+  <meta name="description" content="R tips: 17 HOWTO’s with examples for data analysts">
   <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
-  <meta property="og:title" content="R tips: 16 HOWTO’s with examples for data analysts" />
+  <meta property="og:title" content="R tips: 17 HOWTO’s with examples for data analysts" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="R tips: 16 HOWTO’s with examples for data analysts" />
+  <meta name="twitter:title" content="R tips: 17 HOWTO’s with examples for data analysts" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Lingyun Zhang">
 
 
-<meta name="date" content="2017-11-18">
+<meta name="date" content="2019-03-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -139,8 +139,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="12" data-path="how-to-learn-shiny.html"><a href="how-to-learn-shiny.html"><i class="fa fa-check"></i><b>12</b> How to learn Shiny</a></li>
 <li class="chapter" data-level="13" data-path="how-to-make-a-simple-data-dictionary.html"><a href="how-to-make-a-simple-data-dictionary.html"><i class="fa fa-check"></i><b>13</b> How to make a simple data dictionary</a></li>
 <li class="chapter" data-level="14" data-path="how-to-check-code-efficiency.html"><a href="how-to-check-code-efficiency.html"><i class="fa fa-check"></i><b>14</b> How to check code efficiency</a></li>
-<li class="chapter" data-level="15" data-path="how-to-put-n-things-in-m-boxes.html"><a href="how-to-put-n-things-in-m-boxes.html"><i class="fa fa-check"></i><b>15</b> How to put <em>n</em> things in <em>m</em> boxes</a></li>
-<li class="chapter" data-level="16" data-path="how-to-restore-lost-zeros.html"><a href="how-to-restore-lost-zeros.html"><i class="fa fa-check"></i><b>16</b> How to restore lost zeros</a></li>
+<li class="chapter" data-level="15" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html"><i class="fa fa-check"></i><b>15</b> How to create a package</a><ul>
+<li class="chapter" data-level="15.1" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#what-is-an-r-package"><i class="fa fa-check"></i><b>15.1</b> What is an R package?</a></li>
+<li class="chapter" data-level="15.2" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#two-handy-tools"><i class="fa fa-check"></i><b>15.2</b> Two handy tools</a></li>
+<li class="chapter" data-level="15.3" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#the-procedure"><i class="fa fa-check"></i><b>15.3</b> The procedure</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="how-to-put-n-things-in-m-boxes.html"><a href="how-to-put-n-things-in-m-boxes.html"><i class="fa fa-check"></i><b>16</b> How to put <em>n</em> things in <em>m</em> boxes</a></li>
+<li class="chapter" data-level="17" data-path="how-to-restore-lost-zeros.html"><a href="how-to-restore-lost-zeros.html"><i class="fa fa-check"></i><b>17</b> How to restore lost zeros</a></li>
 </ul>
 
       </nav>
@@ -150,7 +155,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R tips: 16 HOWTO’s with examples for data analysts</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R tips: 17 HOWTO’s with examples for data analysts</a>
           </h1>
         </div>
 
@@ -173,78 +178,78 @@ fk_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <span class="co"># have a look at the data set</span>
 <span class="kw">print.data.frame</span>(fk_data)</code></pre></div>
 <pre><code>##    x1 x2
-## 1   b  D
-## 2   d  D
-## 3   b  D
-## 4   e  A
-## 5   c  D
-## 6   a  B
-## 7   b  C
-## 8   d  C
-## 9   e  B
-## 10  c  D
-## 11  c  E
-## 12  c  D
-## 13  e  A
-## 14  b  E
-## 15  e  A
-## 16  c  B
-## 17  c  D
-## 18  c  B
-## 19  a  B
-## 20  c  E</code></pre>
+## 1   d  B
+## 2   c  C
+## 3   c  B
+## 4   c  B
+## 5   d  B
+## 6   a  C
+## 7   b  B
+## 8   b  A
+## 9   a  D
+## 10  e  D
+## 11  a  A
+## 12  a  E
+## 13  d  C
+## 14  e  D
+## 15  b  C
+## 16  a  E
+## 17  a  D
+## 18  e  C
+## 19  e  A
+## 20  e  C</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a table</span>
 my_table_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">table</span>(fk_data<span class="op">$</span>x1, fk_data<span class="op">$</span>x2)
 <span class="kw">print.table</span>(my_table_<span class="dv">0</span>)</code></pre></div>
 <pre><code>##    
 ##     A B C D E
-##   a 0 2 0 0 0
-##   b 0 0 1 2 1
-##   c 0 2 0 4 2
-##   d 0 0 1 1 0
-##   e 3 1 0 0 0</code></pre>
+##   a 1 0 1 2 2
+##   b 1 1 1 0 0
+##   c 0 2 1 0 0
+##   d 0 2 1 0 0
+##   e 1 0 2 2 0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># if we want to have row and column totals</span>
 my_table_<span class="dv">01</span> &lt;-<span class="st"> </span><span class="kw">addmargins</span>(my_table_<span class="dv">0</span>)
 <span class="kw">print.table</span>(my_table_<span class="dv">01</span>)</code></pre></div>
 <pre><code>##      
 ##        A  B  C  D  E Sum
-##   a    0  2  0  0  0   2
-##   b    0  0  1  2  1   4
-##   c    0  2  0  4  2   8
-##   d    0  0  1  1  0   2
-##   e    3  1  0  0  0   4
-##   Sum  3  5  2  7  3  20</code></pre>
+##   a    1  0  1  2  2   6
+##   b    1  1  1  0  0   3
+##   c    0  2  1  0  0   3
+##   d    0  2  1  0  0   3
+##   e    1  0  2  2  0   5
+##   Sum  3  5  6  4  2  20</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_table_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame.matrix</span>(my_table_<span class="dv">0</span>) <span class="co"># convert it to dataframe</span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">1</span>)</code></pre></div>
 <pre><code>##   A B C D E
-## a 0 2 0 0 0
-## b 0 0 1 2 1
-## c 0 2 0 4 2
-## d 0 0 1 1 0
-## e 3 1 0 0 0</code></pre>
+## a 1 0 1 2 2
+## b 1 1 1 0 0
+## c 0 2 1 0 0
+## d 0 2 1 0 0
+## e 1 0 2 2 0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to have a table of proportions based on rows</span>
 my_table_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">prop.table</span>(my_table_<span class="dv">0</span>, <span class="dt">margin =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">              </span><span class="kw">as.data.frame.matrix</span>() <span class="co"># convert it to dataframe   </span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">2</span>, <span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>##      A    B    C   D    E
-## a 0.00 1.00 0.00 0.0 0.00
-## b 0.00 0.00 0.25 0.5 0.25
-## c 0.00 0.25 0.00 0.5 0.25
-## d 0.00 0.00 0.50 0.5 0.00
-## e 0.75 0.25 0.00 0.0 0.00</code></pre>
+<pre><code>##      A    B    C    D    E
+## a 0.17 0.00 0.17 0.33 0.33
+## b 0.33 0.33 0.33 0.00 0.00
+## c 0.00 0.67 0.33 0.00 0.00
+## d 0.00 0.67 0.33 0.00 0.00
+## e 0.20 0.00 0.40 0.40 0.00</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to have a table of proportions based on columns</span>
 my_table_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">prop.table</span>(my_table_<span class="dv">0</span>, <span class="dt">margin =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">as.data.frame.matrix</span>() <span class="co"># convert it to dataframe   </span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">3</span>, <span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>##   A   B   C    D    E
-## a 0 0.4 0.0 0.00 0.00
-## b 0 0.0 0.5 0.29 0.33
-## c 0 0.4 0.0 0.57 0.67
-## d 0 0.0 0.5 0.14 0.00
-## e 1 0.2 0.0 0.00 0.00</code></pre>
+<pre><code>##      A   B    C   D E
+## a 0.33 0.0 0.17 0.5 1
+## b 0.33 0.2 0.17 0.0 0
+## c 0.00 0.4 0.17 0.0 0
+## d 0.00 0.4 0.17 0.0 0
+## e 0.33 0.0 0.33 0.5 0</code></pre>
 <p><strong>Remark:</strong> If there are NA’s, <strong>table()</strong> function will ignore them. If we want to include NA’s in the table, we can use <strong>dplyr::tally()</strong> plus <strong>tidyr::spread()</strong>; the following example shows how to do this. For more details about <strong>dplyr::tally()</strong>, see the next chapter, <em>How to tally</em>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>())
 
