@@ -178,78 +178,78 @@ fk_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <span class="co"># have a look at the data set</span>
 <span class="kw">print.data.frame</span>(fk_data)</code></pre></div>
 <pre><code>##    x1 x2
-## 1   d  B
-## 2   c  C
-## 3   c  B
-## 4   c  B
-## 5   d  B
-## 6   a  C
+## 1   a  E
+## 2   e  D
+## 3   d  B
+## 4   e  B
+## 5   c  B
+## 6   e  E
 ## 7   b  B
-## 8   b  A
-## 9   a  D
-## 10  e  D
-## 11  a  A
-## 12  a  E
-## 13  d  C
-## 14  e  D
-## 15  b  C
-## 16  a  E
-## 17  a  D
-## 18  e  C
-## 19  e  A
-## 20  e  C</code></pre>
+## 8   c  C
+## 9   a  E
+## 10  b  B
+## 11  e  B
+## 12  c  C
+## 13  b  A
+## 14  b  D
+## 15  d  D
+## 16  b  C
+## 17  d  A
+## 18  c  E
+## 19  b  A
+## 20  a  A</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a table</span>
 my_table_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">table</span>(fk_data<span class="op">$</span>x1, fk_data<span class="op">$</span>x2)
 <span class="kw">print.table</span>(my_table_<span class="dv">0</span>)</code></pre></div>
 <pre><code>##    
 ##     A B C D E
-##   a 1 0 1 2 2
-##   b 1 1 1 0 0
-##   c 0 2 1 0 0
-##   d 0 2 1 0 0
-##   e 1 0 2 2 0</code></pre>
+##   a 1 0 0 0 2
+##   b 2 2 1 1 0
+##   c 0 1 2 0 1
+##   d 1 1 0 1 0
+##   e 0 2 0 1 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># if we want to have row and column totals</span>
 my_table_<span class="dv">01</span> &lt;-<span class="st"> </span><span class="kw">addmargins</span>(my_table_<span class="dv">0</span>)
 <span class="kw">print.table</span>(my_table_<span class="dv">01</span>)</code></pre></div>
 <pre><code>##      
 ##        A  B  C  D  E Sum
-##   a    1  0  1  2  2   6
-##   b    1  1  1  0  0   3
-##   c    0  2  1  0  0   3
-##   d    0  2  1  0  0   3
-##   e    1  0  2  2  0   5
-##   Sum  3  5  6  4  2  20</code></pre>
+##   a    1  0  0  0  2   3
+##   b    2  2  1  1  0   6
+##   c    0  1  2  0  1   4
+##   d    1  1  0  1  0   3
+##   e    0  2  0  1  1   4
+##   Sum  4  6  3  3  4  20</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_table_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame.matrix</span>(my_table_<span class="dv">0</span>) <span class="co"># convert it to dataframe</span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">1</span>)</code></pre></div>
 <pre><code>##   A B C D E
-## a 1 0 1 2 2
-## b 1 1 1 0 0
-## c 0 2 1 0 0
-## d 0 2 1 0 0
-## e 1 0 2 2 0</code></pre>
+## a 1 0 0 0 2
+## b 2 2 1 1 0
+## c 0 1 2 0 1
+## d 1 1 0 1 0
+## e 0 2 0 1 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to have a table of proportions based on rows</span>
 my_table_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">prop.table</span>(my_table_<span class="dv">0</span>, <span class="dt">margin =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">              </span><span class="kw">as.data.frame.matrix</span>() <span class="co"># convert it to dataframe   </span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">2</span>, <span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>##      A    B    C    D    E
-## a 0.17 0.00 0.17 0.33 0.33
-## b 0.33 0.33 0.33 0.00 0.00
-## c 0.00 0.67 0.33 0.00 0.00
-## d 0.00 0.67 0.33 0.00 0.00
-## e 0.20 0.00 0.40 0.40 0.00</code></pre>
+## a 0.33 0.00 0.00 0.00 0.67
+## b 0.33 0.33 0.17 0.17 0.00
+## c 0.00 0.25 0.50 0.00 0.25
+## d 0.33 0.33 0.00 0.33 0.00
+## e 0.00 0.50 0.00 0.25 0.25</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># to have a table of proportions based on columns</span>
 my_table_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">prop.table</span>(my_table_<span class="dv">0</span>, <span class="dt">margin =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">as.data.frame.matrix</span>() <span class="co"># convert it to dataframe   </span>
 <span class="co"># have a look at the table</span>
 <span class="kw">print.data.frame</span>(my_table_<span class="dv">3</span>, <span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>##      A   B    C   D E
-## a 0.33 0.0 0.17 0.5 1
-## b 0.33 0.2 0.17 0.0 0
-## c 0.00 0.4 0.17 0.0 0
-## d 0.00 0.4 0.17 0.0 0
-## e 0.33 0.0 0.33 0.5 0</code></pre>
+<pre><code>##      A    B    C    D    E
+## a 0.25 0.00 0.00 0.00 0.50
+## b 0.50 0.33 0.33 0.33 0.00
+## c 0.00 0.17 0.67 0.00 0.25
+## d 0.25 0.17 0.00 0.33 0.00
+## e 0.00 0.33 0.00 0.33 0.25</code></pre>
 <p><strong>Remark:</strong> If there are NA’s, <strong>table()</strong> function will ignore them. If we want to include NA’s in the table, we can use <strong>dplyr::tally()</strong> plus <strong>tidyr::spread()</strong>; the following example shows how to do this. For more details about <strong>dplyr::tally()</strong>, see the next chapter, <em>How to tally</em>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>())
 

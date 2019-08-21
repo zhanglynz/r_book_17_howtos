@@ -713,7 +713,8 @@ RoxygenNote: 6.1.1
     - initialize the project. Tools>Version Control>...
     - stage and commit
     - create a repo under your Github account
-    - set up connection by clicking  `Git` button; then clicking on the “two purple boxes and a white square” in the Git pane .... (Reference: section 17.5.3 on https://happygitwithr.com/existing-github-last.html)
+    - set up connection by clicking  `Git` button; then clicking on the “two purple boxes and a white square” in the Git pane .... (Key parameters: new branch name `master`; remote name `origin`.
+    Reference: section 17.5.3 on https://happygitwithr.com/existing-github-last.html)
     - commit and push
 
 
