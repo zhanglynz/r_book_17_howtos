@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>15 How to create a package | R tips: 17 HOWTO's with examples for data analysts</title>
+  <meta name="description" content="15 How to create a package | R tips: 17 HOWTO's with examples for data analysts" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="15 How to create a package | R tips: 17 HOWTO's with examples for data analysts" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="15 How to create a package | R tips: 17 HOWTO's with examples for data analysts" />
+  
+  
+  
+
+<meta name="author" content="Lingyun Zhang" />
+
+
+<meta name="date" content="2019-03-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="how-to-check-code-efficiency.html"/>
+<link rel="next" href="how-to-put-n-things-in-m-boxes.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KR8DZLTPXY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KR8DZLTPXY');
+</script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="how-to-organize-a-project-folder.html"><a href="how-to-organize-a-project-folder.html"><i class="fa fa-check"></i><b>1</b> How to organize a project folder</a></li>
+<li class="chapter" data-level="2" data-path="how-to-read-data-into-r.html"><a href="how-to-read-data-into-r.html"><i class="fa fa-check"></i><b>2</b> How to read data into <strong>R</strong></a></li>
+<li class="chapter" data-level="3" data-path="how-to-explore-a-new-data-set.html"><a href="how-to-explore-a-new-data-set.html"><i class="fa fa-check"></i><b>3</b> How to explore a &quot;new&quot; data set</a></li>
+<li class="chapter" data-level="4" data-path="how-to-deal-with-nas.html"><a href="how-to-deal-with-nas.html"><i class="fa fa-check"></i><b>4</b> How to deal with NA's</a></li>
+<li class="chapter" data-level="5" data-path="how-to-deal-with-empty-spaces.html"><a href="how-to-deal-with-empty-spaces.html"><i class="fa fa-check"></i><b>5</b> How to deal with empty spaces</a><ul>
+<li class="chapter" data-level="5.1" data-path="how-to-deal-with-empty-spaces.html"><a href="how-to-deal-with-empty-spaces.html#empty-spaces-in-variable-names"><i class="fa fa-check"></i><b>5.1</b> Empty spaces in variable names</a></li>
+<li class="chapter" data-level="5.2" data-path="how-to-deal-with-empty-spaces.html"><a href="how-to-deal-with-empty-spaces.html#empty-spaces-in-variable-values"><i class="fa fa-check"></i><b>5.2</b> Empty spaces in variable values</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="how-to-do-simple-re-coding.html"><a href="how-to-do-simple-re-coding.html"><i class="fa fa-check"></i><b>6</b> How to do simple re-coding</a></li>
+<li class="chapter" data-level="7" data-path="how-to-create-contingency-tables.html"><a href="how-to-create-contingency-tables.html"><i class="fa fa-check"></i><b>7</b> How to create contingency tables</a></li>
+<li class="chapter" data-level="8" data-path="how-to-tally.html"><a href="how-to-tally.html"><i class="fa fa-check"></i><b>8</b> How to tally</a></li>
+<li class="chapter" data-level="9" data-path="how-to-join-two-data-tables.html"><a href="how-to-join-two-data-tables.html"><i class="fa fa-check"></i><b>9</b> How to join two data tables</a></li>
+<li class="chapter" data-level="10" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html"><i class="fa fa-check"></i><b>10</b> How to plot data</a><ul>
+<li class="chapter" data-level="10.1" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-basic-bar-charts"><i class="fa fa-check"></i><b>10.1</b> Creating basic bar charts</a></li>
+<li class="chapter" data-level="10.2" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-side-by-side-and-stacked-bar-charts"><i class="fa fa-check"></i><b>10.2</b> Creating side-by-side and stacked bar charts</a></li>
+<li class="chapter" data-level="10.3" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-back-to-back-bar-charts"><i class="fa fa-check"></i><b>10.3</b> Creating back-to-back bar charts</a></li>
+<li class="chapter" data-level="10.4" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-pareto-charts"><i class="fa fa-check"></i><b>10.4</b> Creating Pareto charts</a></li>
+<li class="chapter" data-level="10.5" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-lollipop-charts"><i class="fa fa-check"></i><b>10.5</b> Creating lollipop charts</a></li>
+<li class="chapter" data-level="10.6" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-treemaps"><i class="fa fa-check"></i><b>10.6</b> Creating treemaps</a></li>
+<li class="chapter" data-level="10.7" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-scatter-plots"><i class="fa fa-check"></i><b>10.7</b> Creating scatter plots</a></li>
+<li class="chapter" data-level="10.8" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-side-by-side-box-plots"><i class="fa fa-check"></i><b>10.8</b> Creating side-by-side box plots</a></li>
+<li class="chapter" data-level="10.9" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-grid-plots"><i class="fa fa-check"></i><b>10.9</b> Creating grid plots</a></li>
+<li class="chapter" data-level="10.10" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-a-simple-pca-plot"><i class="fa fa-check"></i><b>10.10</b> Creating a simple PCA plot</a></li>
+<li class="chapter" data-level="10.11" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#creating-time-series-plots"><i class="fa fa-check"></i><b>10.11</b> Creating time series plots</a></li>
+<li class="chapter" data-level="10.12" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#showing-pop-ups"><i class="fa fa-check"></i><b>10.12</b> Showing pop-up's</a></li>
+<li class="chapter" data-level="10.13" data-path="how-to-plot-data.html"><a href="how-to-plot-data.html#putting-plots-in-one-panel"><i class="fa fa-check"></i><b>10.13</b> Putting plots in one panel</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="how-to-create-a-dynamic-report.html"><a href="how-to-create-a-dynamic-report.html"><i class="fa fa-check"></i><b>11</b> How to create a dynamic report</a></li>
+<li class="chapter" data-level="12" data-path="how-to-learn-shiny.html"><a href="how-to-learn-shiny.html"><i class="fa fa-check"></i><b>12</b> How to learn Shiny</a></li>
+<li class="chapter" data-level="13" data-path="how-to-make-a-simple-data-dictionary.html"><a href="how-to-make-a-simple-data-dictionary.html"><i class="fa fa-check"></i><b>13</b> How to make a simple data dictionary</a></li>
+<li class="chapter" data-level="14" data-path="how-to-check-code-efficiency.html"><a href="how-to-check-code-efficiency.html"><i class="fa fa-check"></i><b>14</b> How to check code efficiency</a></li>
+<li class="chapter" data-level="15" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html"><i class="fa fa-check"></i><b>15</b> How to create a package</a><ul>
+<li class="chapter" data-level="15.1" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#what-is-an-r-package"><i class="fa fa-check"></i><b>15.1</b> What is an R package?</a></li>
+<li class="chapter" data-level="15.2" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#two-handy-tools"><i class="fa fa-check"></i><b>15.2</b> Two handy tools</a></li>
+<li class="chapter" data-level="15.3" data-path="how-to-create-a-package.html"><a href="how-to-create-a-package.html#the-procedure"><i class="fa fa-check"></i><b>15.3</b> The procedure</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="how-to-put-n-things-in-m-boxes.html"><a href="how-to-put-n-things-in-m-boxes.html"><i class="fa fa-check"></i><b>16</b> How to put <em>n</em> things in <em>m</em> boxes</a></li>
+<li class="chapter" data-level="17" data-path="how-to-restore-lost-zeros.html"><a href="how-to-restore-lost-zeros.html"><i class="fa fa-check"></i><b>17</b> How to restore lost zeros</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R tips: 17 HOWTO's with examples for data analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="how-to-create-a-package" class="section level1">
+<h1><span class="header-section-number">15</span> How to create a package</h1>
+<div id="what-is-an-r-package" class="section level2">
+<h2><span class="header-section-number">15.1</span> What is an R package?</h2>
+<p>An R package is a folder that contains required files and sub-folders. In RStudio, it is easy to create an R package.</p>
+</div>
+<div id="two-handy-tools" class="section level2">
+<h2><span class="header-section-number">15.2</span> Two handy tools</h2>
+<ul>
+<li><code>devtools</code></li>
+<li><code>roxygen2</code></li>
+</ul>
+</div>
+<div id="the-procedure" class="section level2">
+<h2><span class="header-section-number">15.3</span> The procedure</h2>
+<ul>
+<li><p><strong>Step 1:</strong> Create the &quot;structure&quot;, which is an empty folder containing required although empty sub-folders and files, in RStudio. <strong>file&gt;new project...&gt;package</strong></p></li>
+<li><p><strong>Step 2:</strong> Write R files and save them in the R folder. An example:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; find key information about a dataframe</span>
+<span class="co">#&#39;</span>
+<span class="co">#&#39; This function allows you to find key information about a dataframe</span>
+<span class="co">#&#39; @param a_df a dataframe</span>
+<span class="co">#&#39; @keywords key info; dataframe</span>
+<span class="co">#&#39; @export</span>
+<span class="co">#&#39; @author Lingyun (Larry) Zhang \email{lyzhang10@gmail.com}</span>
+<span class="co">#&#39; @examples</span>
+<span class="co">#&#39; temp_df &lt;-</span>
+<span class="co">#&#39;      data.frame(a = 1:10,</span>
+<span class="co">#&#39;                 b = NA,</span>
+<span class="co">#&#39;                 e = c(letters[1:8], NA, NA))</span>
+<span class="co">#&#39; x &lt;- find_df_key_info(temp_df)</span>
+
+<span class="co">#&#39; @importFrom magrittr %&gt;%</span>
+
+find_df_key_info &lt;-<span class="st"> </span><span class="cf">function</span>(a_df)
+{re_df &lt;-
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">vari_names =</span> <span class="kw">names</span>(a_df)) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">type =</span> purrr<span class="op">::</span><span class="kw">map_chr</span>(a_df, typeof),
+                <span class="dt">no_of_unique_rows =</span> purrr<span class="op">::</span><span class="kw">map_int</span>(a_df, <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x))),
+                <span class="dt">no_of_rows =</span> <span class="kw">dim</span>(a_df)[<span class="dv">1</span>],
+                <span class="dt">no_of_NAs =</span> purrr<span class="op">::</span><span class="kw">map_int</span>(a_df, <span class="cf">function</span>(x) <span class="kw">sum</span>(<span class="kw">is.na</span>(x))))
+ <span class="kw">return</span>(re_df)
+}</code></pre></div>
+<ul>
+<li><strong>Step 3:</strong> Run the following R code</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">library</span>(roxygen2)
+<span class="kw">document</span>()</code></pre></div>
+<ul>
+<li><strong>Step 4:</strong> Work on <code>DESCRIPTION</code> file. An example:</li>
+</ul>
+<pre><code>Package: dfexplorer
+Type: Package
+Title: &#39;dfexplorer&#39; for explore new dataframe
+Version: 0.1.0
+Author: Lingyun (Larry) Zhang
+Maintainer: Lingyun (Larry) Zhang &lt;lyzhang10@gmail.com&gt;
+Description: This package contains functions for explore &quot;new&quot; data in a dataframe
+Imports:
+    dplyr, 
+    magrittr,
+    purrr
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1</code></pre>
+<ul>
+<li><p><strong>Step 5:</strong> Build the package by clicking on the <code>Build</code> button and ...</p></li>
+<li><strong>Step 6:</strong> Version control---link to a repo in Github
+<ul>
+<li>initialize the project. Tools&gt;Version Control&gt;...</li>
+<li>stage and commit</li>
+<li>create a repo under your Github account</li>
+<li>set up connection by clicking <code>Git</code> button; then clicking on the “two purple boxes and a white square” in the Git pane .... (Key parameters: new branch name <code>master</code>; remote name <code>origin</code>. Reference: section 17.5.3 on <a href="https://happygitwithr.com/existing-github-last.html" class="uri">https://happygitwithr.com/existing-github-last.html</a>)</li>
+<li>commit and push</li>
+</ul></li>
+</ul>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="how-to-check-code-efficiency.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="how-to-put-n-things-in-m-boxes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
